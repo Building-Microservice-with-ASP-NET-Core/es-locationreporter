@@ -1,17 +1,18 @@
 
-[![wercker status](https://app.wercker.com/status/e4b3fc720fe1dd78448db63586a6b4c3/m/master "wercker status")](https://app.wercker.com/project/byKey/e4b3fc720fe1dd78448db63586a6b4c3)
+[![wercker status](https://app.wercker.com/status/3ce6ec1904a51afc60821482412506f0/s/master "wercker status")](https://app.wercker.com/project/byKey/3ce6ec1904a51afc60821482412506f0)
 
 # Location Reporter
-Location Reporter Microservice. This is part of the suite of services used for the Event Sourcing / CQRS sample in the **Microservices with ASP.NET Core** book from O'Reilly Media. This sample fills the role of the _command submitter_. Applications (mobile, web, embedded, etc) will consume this service to indicate that a new location of a team member has been determined. 
 
-While this is a simple service with a single command to submit (location report), real-world samples often have multiple command services responsible for ingesting a wide variety of commands. 
+这是 Location Reporter 微服务。
 
-This service will then convert a command into an event, which is typically done by turning the payload of the command (an expression of intent, e.g. _please record this team member's location_, to something that has occurred in the past, e.g. _member location recorded_).
+这个服务是《ASP.NET Core 微服务实战》一书中，事件溯源和 CQRS 示例中使用的多个微服务的一部分。这个示例扮演其中*命令提交者*的角色，各个应用会消费这一服务来指示已发现一个团队成员的新位置。由于这只是一个简单的示例服务，它只有一个命令可供提交（即提交并报送位置），真实世界中的例子通常会提交多个命令服务，以负责处理更多种类型的命令。
 
-The API for this service is quite simple:
+这个服务接着将命令转换为事件，典型情况下是从命令的正文转换而来（从把一个表示意图的表达式，比如*请记录此团队成员的位置*，转换成一个在过去已经发生的事件，比如*团队成员的位置已记录*）。
+
+此服务的 API 相当简单：
 
 |Resource|Method|Description|
 |---|---|---|
-|/api/members/{memberId}/locationreports|POST|Submits a new location report to the service|
+|/api/members/{memberId}/locationreports|POST|向服务提交一个新的位置报送记录|
 
 
