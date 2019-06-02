@@ -29,7 +29,7 @@ namespace StatlerWaldorfCorp.LocationReporter.Events
             connectionFactory.Password = rabbitOptions.Password;
             connectionFactory.VirtualHost = rabbitOptions.VirtualHost;
             connectionFactory.HostName = rabbitOptions.HostName;
-            connectionFactory.Uri = rabbitOptions.Uri;
+            connectionFactory.Uri = new Uri(rabbitOptions.Uri);
             
             logger.LogInformation("AMQP Event Emitter configured with URI {0}", rabbitOptions.Uri);
         }
