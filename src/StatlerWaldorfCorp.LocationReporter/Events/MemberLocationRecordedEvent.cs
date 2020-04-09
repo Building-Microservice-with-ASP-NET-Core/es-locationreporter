@@ -1,5 +1,5 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace StatlerWaldorfCorp.LocationReporter.Events
 {
@@ -14,7 +14,7 @@ namespace StatlerWaldorfCorp.LocationReporter.Events
         public Guid TeamID { get; set; }
 
         public string toJson() {
-            return JsonConvert.SerializeObject(this);
+            return JsonSerializer.Serialize(this);
         }
     }
 }

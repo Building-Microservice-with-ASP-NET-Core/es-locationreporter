@@ -8,31 +8,22 @@ using System.Linq;
 using StatlerWaldorfCorp.LocationReporter.Models;
 using StatlerWaldorfCorp.LocationReporter.Events;
 using StatlerWaldorfCorp.LocationReporter.Services;
+using Microsoft.Extensions.Hosting;
 
 namespace StatlerWaldorfCorp.LocationReporter
 {
     public class Startup
     {        
-        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory) 
+        public Startup(IConfiguration configuration) 
         {
-            loggerFactory.AddConsole();
-            loggerFactory.AddDebug();
-            
-            var builder = new ConfigurationBuilder()                
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
-		        .AddEnvironmentVariables();		                    
-
-	        Configuration = builder.Build();    		        
+	        Configuration = configuration;    		        
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services) 
         {
-            services.AddMvc();
-            services.AddOptions();
-
+            services.AddControllers();
             services.Configure<AMQPOptions>(Configuration.GetSection("amqp"));            
             services.Configure<TeamServiceOptions>(Configuration.GetSection("teamservice"));
 
@@ -41,16 +32,18 @@ namespace StatlerWaldorfCorp.LocationReporter
             services.AddSingleton(typeof(ITeamServiceClient), typeof(HttpTeamServiceClient));
         }
 
-        public void Configure(IApplicationBuilder app, 
-                IHostingEnvironment env, 
-                ILoggerFactory loggerFactory,
-                ITeamServiceClient teamServiceClient,
-                IEventEmitter eventEmitter) 
-        {           
-            // Asked for instances of singletons during Startup
-            // to force initialization early.
-            
-            app.UseMvc();
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseRouting();
+            app.UseEndpoints(endpoint =>
+            {
+                endpoint.MapControllers();
+            });
         }
     }
 }

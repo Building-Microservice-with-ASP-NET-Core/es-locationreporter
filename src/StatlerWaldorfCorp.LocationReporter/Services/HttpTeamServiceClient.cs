@@ -4,8 +4,8 @@ using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Newtonsoft.Json;
 using StatlerWaldorfCorp.LocationReporter.Models;
+using System.Text.Json;
 
 namespace StatlerWaldorfCorp.LocationReporter.Services
 {
@@ -38,7 +38,7 @@ namespace StatlerWaldorfCorp.LocationReporter.Services
             TeamIDResponse teamIdResponse;
             if (response.IsSuccessStatusCode) {
                 string json = response.Content.ReadAsStringAsync().Result;
-                teamIdResponse = JsonConvert.DeserializeObject<TeamIDResponse>(json);
+                teamIdResponse = JsonSerializer.Deserialize<TeamIDResponse>(json);
                 return teamIdResponse.TeamID;
             }
             else {
