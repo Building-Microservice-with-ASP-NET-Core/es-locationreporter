@@ -7,8 +7,8 @@ using RabbitMQ.Client;
 using StatlerWaldorfCorp.LocationReporter.Models;
 
 namespace StatlerWaldorfCorp.LocationReporter.Events
-{    
-    
+{
+
     public class AMQPEventEmitter : IEventEmitter
     {
         private readonly ILogger logger;
@@ -24,21 +24,23 @@ namespace StatlerWaldorfCorp.LocationReporter.Events
             this.rabbitOptions = amqpOptions.Value;
 
             connectionFactory = new ConnectionFactory();
-            
+
             connectionFactory.UserName = rabbitOptions.Username;
             connectionFactory.Password = rabbitOptions.Password;
             connectionFactory.VirtualHost = rabbitOptions.VirtualHost;
             connectionFactory.HostName = rabbitOptions.HostName;
             connectionFactory.Uri = new Uri(rabbitOptions.Uri);
-            
-            logger.LogInformation("AMQP Event Emitter configured with URI {0}", rabbitOptions.Uri);
+
+            this.logger.LogInformation("AMQP Event Emitter configured with URI {0}", rabbitOptions.Uri);
         }
         public const string QUEUE_LOCATIONRECORDED = "memberlocationrecorded";
 
         public void EmitLocationRecordedEvent(MemberLocationRecordedEvent locationRecordedEvent)
-        {                    
-            using (IConnection conn = connectionFactory.CreateConnection()) {
-                using (IModel channel = conn.CreateModel()) {
+        {
+            using (IConnection conn = connectionFactory.CreateConnection())
+            {
+                using (IModel channel = conn.CreateModel())
+                {
                     channel.QueueDeclare(
                         queue: QUEUE_LOCATIONRECORDED,
                         durable: false,

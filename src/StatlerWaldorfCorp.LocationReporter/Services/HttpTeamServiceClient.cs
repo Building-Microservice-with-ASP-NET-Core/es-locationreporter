@@ -6,11 +6,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using StatlerWaldorfCorp.LocationReporter.Models;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace StatlerWaldorfCorp.LocationReporter.Services
 {
     public class HttpTeamServiceClient : ITeamServiceClient
-    {        
+    {
         private readonly ILogger logger;
 
         private HttpClient httpClient;
@@ -20,7 +21,7 @@ namespace StatlerWaldorfCorp.LocationReporter.Services
             ILogger<HttpTeamServiceClient> logger)
         {
             this.logger = logger;
-               
+
             var url = serviceOptions.Value.Url;
 
             logger.LogInformation("Team Service HTTP client using URL {0}", url);
@@ -28,22 +29,24 @@ namespace StatlerWaldorfCorp.LocationReporter.Services
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(url);
         }
-        public Guid GetTeamForMember(Guid memberId)
-        {                            
+        public async Task<Guid> GetTeamForMember(Guid memberId)
+        {
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             HttpResponseMessage response = httpClient.GetAsync(String.Format("/members/{0}/team", memberId)).Result;
 
             TeamIDResponse teamIdResponse;
-            if (response.IsSuccessStatusCode) {
-                string json = response.Content.ReadAsStringAsync().Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
                 teamIdResponse = JsonSerializer.Deserialize<TeamIDResponse>(json);
                 return teamIdResponse.TeamID;
             }
-            else {
+            else
+            {
                 return Guid.Empty;
-            }            
+            }
         }
     }
 
