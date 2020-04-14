@@ -28,7 +28,7 @@ namespace StatlerWaldorfCorp.LocationReporter.Controllers
         public async Task<ActionResult> PostLocationReport(Guid memberId, [FromBody]LocationReport locationReport)
         {
             MemberLocationRecordedEvent locationRecordedEvent = converter.CommandToEvent(locationReport);
-            //locationRecordedEvent.TeamID = await teamServiceClient.GetTeamForMember(locationReport.MemberID);
+            locationRecordedEvent.TeamID = await teamServiceClient.GetTeamForMember(locationReport.MemberID);
             eventEmitter.EmitLocationRecordedEvent(locationRecordedEvent);
 
             return this.Created($"/api/members/{memberId}/locationreports/{locationReport.ReportID}", locationReport);

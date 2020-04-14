@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using StatlerWaldorfCorp.LocationReporter.Services;
 
 namespace StatlerWaldorfCorp.LocationReporter.Tests.Fakes
@@ -7,18 +8,20 @@ namespace StatlerWaldorfCorp.LocationReporter.Tests.Fakes
     {
         private Guid teamGuid;
 
-        public FakeTeamServiceClient() {
+        public FakeTeamServiceClient()
+        {
             teamGuid = Guid.NewGuid();
         }
-    
-        public Guid GetTeamForMember(Guid memberId)
+
+        public async Task<Guid> GetTeamForMember(Guid memberId)
         {
-            return teamGuid;
+            return await Task.FromResult(teamGuid);//  teamGuid;
         }
 
-        public Guid FixedID 
+        public Guid FixedID
         {
-            get {
+            get
+            {
                 return teamGuid;
             }
         }
